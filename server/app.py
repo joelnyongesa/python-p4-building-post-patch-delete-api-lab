@@ -66,5 +66,24 @@ def most_expensive_baked_good():
     )
     return response
 
+@app.route('/baked_goods', methods=["POST"])
+def baked_goods():
+    if request.method == "POST":
+        new_baked_good = BakedGood(
+            name=request.get_json()["name"],
+            price= request.get_json()["price"],
+            bakery_id = request.get_json()["bakery_id"]
+        )
+
+        db.session.add(new_baked_good)
+        db.session.commit()
+
+        response = make_response(
+            jsonify(new_baked_good.to_dict()),
+            201
+        )
+
+        return response
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
